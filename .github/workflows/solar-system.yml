@@ -103,6 +103,7 @@ jobs:
       needs: docker
       environment: 
         name: development
+
       steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -136,4 +137,10 @@ jobs:
             }}
           INGRESS_IP: '${{ env.INGRESS_IP }}'
       - run: cat kubernetes/development/*.yaml
+
+    integration-test:
+      needs:  dev-deploy
+      uses: ./.github/workflows/reusable-workflow.yml
+      with:
+        ingress-url: ${{ needs.dev-deploy.outputs.APP_INGRESS_URL }}
         
